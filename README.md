@@ -43,6 +43,7 @@ if (await midy.requestAccess()) {
 | `access`      | MIDI access  | `MIDIAccess`    |
 | `inputs`      | MIDI inputs  | `MIDIInputMap`  |
 | `outputs`     | MIDI outputs | `MIDIOutputMap` |
+| `state`       | Access state | `string`        |
 
 ## Events
 
