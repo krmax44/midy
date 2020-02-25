@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "strict": true,
+    "preserveConstEnums": true,
+    "target": "esnext",
+    "esModuleInterop": true,
+    "declaration": true,
+    "outDir": "./build/"
+  },
+  "exclude": ["node_modules", "**/__tests__/**", "**/build/**"],
+  "include": ["src/**/*.ts"],
+  "types": ["jest", "webmidi"]
+}
