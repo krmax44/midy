@@ -47,7 +47,9 @@ describe('Midy', () => {
 
 		expect(midi.state).toBe('granted');
 		expect(listenerUp.mock.calls[0][0]).toBe(60);
+		expect(listenerUp.mock.calls[0][1]).toBe(1);
 		expect(listenerDown.mock.calls[0][0]).toBe(62);
+		expect(listenerDown.mock.calls[0][1]).toBe(1);
 	});
 
 	it('catches denial', async () => {

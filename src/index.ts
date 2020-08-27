@@ -1,6 +1,11 @@
 import Houk from 'houk';
 
-export default class Midy extends Houk {
+type MidiNoteEvent = [midiNote: number, midiChannel: number];
+export default class Midy extends Houk<{
+	noteUp: MidiNoteEvent;
+	noteDown: MidiNoteEvent;
+	midiMessage: [midiMessageEventData: WebMidi.MIDIMessageEvent];
+}> {
 	public access: WebMidi.MIDIAccess | undefined;
 	public inputs: WebMidi.MIDIInputMap | undefined;
 	public outputs: WebMidi.MIDIOutputMap | undefined;
@@ -20,16 +25,16 @@ export default class Midy extends Houk {
 			this.outputs = outputs;
 
 			for (const input of inputs.values()) {
-				input.addEventListener('midimessage', midiMessage => {
+				input.addEventListener('midimessage', (midiMessage) => {
 					const [type, note] = midiMessage.data;
 
-					if (type === 128) {
-						this.emit('noteUp', undefined, note);
-					} else if (type === 144) {
-						this.emit('noteDown', undefined, note);
+					if (type >= 128 && type <= 159) {
+						const event = type >= 144 ? 'noteDown' : 'noteUp';
+						const channel = event === 'noteDown' ? -143 + type : 129 - type;
+						void this.emit(event, note, channel);
 					}
 
-					this.emit('midiMessage', midiMessage);
+					void this.emit('midiMessage', midiMessage);
 				});
 			}
 
