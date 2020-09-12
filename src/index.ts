@@ -1,6 +1,9 @@
 import Houk from 'houk';
 
-type MidiNoteEvent = [midiNote: number, midiChannel: number];
+// See midi event table
+// https://web.archive.org/web/20200204061816/https://www.onicos.com/staff/iz/formats/midi-event.html
+
+type MidiNoteEvent = [midiNote: number, midiChannel: number, velocity: number];
 export default class Midy extends Houk<{
 	noteUp: MidiNoteEvent;
 	noteDown: MidiNoteEvent;
@@ -26,12 +29,17 @@ export default class Midy extends Houk<{
 
 			for (const input of inputs.values()) {
 				input.addEventListener('midimessage', (midiMessage) => {
-					const [type, note] = midiMessage.data;
+					const [statusByte, dataByte1, dataByte2] = midiMessage.data;
 
-					if (type >= 128 && type <= 159) {
-						const event = type >= 144 ? 'noteDown' : 'noteUp';
-						const channel = event === 'noteDown' ? -143 + type : 129 - type;
-						void this.emit(event, note, channel);
+					if (statusByte >= 128 && statusByte <= 159) {
+						const event = statusByte >= 144 ? 'noteDown' : 'noteUp';
+						const channel =
+							event === 'noteDown' ? statusByte - 143 : 129 - statusByte;
+
+						const note = dataByte1;
+						const velocity = dataByte2;
+
+						void this.emit(event, note, channel, velocity);
 					}
 
 					void this.emit('midiMessage', midiMessage);

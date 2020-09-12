@@ -22,8 +22,8 @@ import Midy from 'midy';
 
 const midy = new Midy();
 if (await midy.requestAccess()) {
-	midy.on('noteDown', (note, channel) => {
-		console.log('A key was pressed!', note, channel);
+	midy.on('noteDown', (note, channel, velocity) => {
+		console.log('A key was pressed!', note, channel, velocity);
 	});
 }
 ```
@@ -38,11 +38,11 @@ if (await midy.requestAccess()) {
 
 ## Events
 
-| Event name    	| Description                       	| Parameters                                	|
-|---------------	|-----------------------------------	|-------------------------------------------	|
-| `noteUp`      	| Triggered once a key is released. 	| MIDI note `number`, MIDI channel `number` 	|
-| `noteDown`    	| Triggered once a key is pressed.  	| MIDI note `number`, MIDI channel `number` 	|
-| `midiMessage` 	| Raw MIDI events.                  	| MIDI event `MIDIMessageEvent`             	|
+| Event name    | Description                       | Parameters                                                   |
+| ------------- | --------------------------------- | ------------------------------------------------------------ |
+| `noteUp`      | Triggered once a key is released. | MIDI note `number`, MIDI channel `number`, velocity `number` |
+| `noteDown`    | Triggered once a key is pressed.  | MIDI note `number`, MIDI channel `number`, velocity `number` |
+| `midiMessage` | Raw MIDI events.                  | MIDI event `MIDIMessageEvent`                                |
 
 ## Properties
 
@@ -51,4 +51,4 @@ if (await midy.requestAccess()) {
 | `access`      | MIDI access  | `MIDIAccess`    |
 | `inputs`      | MIDI inputs  | `MIDIInputMap`  |
 | `outputs`     | MIDI outputs | `MIDIOutputMap` |
-| `state`       | Access state | `'none' | 'pending' | 'granted' | 'denied'`        |
+| `state`       | Access state | `'none'         | 'pending' | 'granted' | 'denied'` |
